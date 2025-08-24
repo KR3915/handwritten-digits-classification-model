@@ -8,7 +8,7 @@ device = torch.device('cuda' if torch.cuda.is_available()  else 'cpu')
 model = DigitCNN().to(device) 
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr = 0.001)
+optimizer = optim.Adam(model.parameters(), lr = 0.05)
 
 # == training loop ==
 epochs = 5
@@ -22,16 +22,16 @@ for epoch in range(epochs):
         images, labels = images.to(device), labels.to(device)
 
     #forward -> backward -> update
-    outputs = model(images)
-    loss = criterion(outputs, labels)
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
-    running_loss += loss.item()
-    _, predicted = outputs.max(1)
-    total += labels.size(0)
-    correct += (predicted == labels).sum().item()
+        running_loss += loss.item()
+        _, predicted = outputs.max(1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
     
     train_loss = running_loss / len(train_loader)
     train_acc = 100 * correct / total
